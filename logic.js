@@ -9,7 +9,6 @@ export const ROWS = [
   { id: "C", session: 2, label: "C · session 2" },
 ];
 
-/** Row split: first session of each person in train, second in test → every ID overlaps. */
 export function rowSplitMembership() {
   const train = [];
   const test = [];
@@ -20,7 +19,6 @@ export function rowSplitMembership() {
   return { train, test, overlapIds: overlapParticipantIds(train, test) };
 }
 
-/** Person split: A and B entirely in train; C entirely in test → no overlap. */
 export function personSplitMembership() {
   const train = [];
   const test = [];
@@ -57,7 +55,7 @@ export const QUESTIONS = [
   {
     id: "q3",
     prompt:
-      "You will evaluate on a **brand-new person D** who was never in training. Which split strategy matches that question?",
+      "Person **D** arrives with two new sessions and must never appear in training. Both of D's rows belong in **test only**. Which split strategy matches that evaluation?",
     choices: [
       "Row split (sessions of the same person can straddle train and test)",
       "Person split (each person stays entirely in one set)",
@@ -66,7 +64,7 @@ export const QUESTIONS = [
     ],
     correctIndex: 1,
     missHint:
-      "A new person needs every row from known people kept out of the test fold for that person. Person-level grouping prevents train rows from leaking identity patterns into test.",
+      "Keep every row from a participant in one set. For a new person D, place both sessions in test and keep D out of train entirely—person-level grouping supports that; row splits do not.",
   },
   {
     id: "q4",
@@ -96,6 +94,12 @@ export const QUESTIONS = [
   },
 ];
 
+export function choiceLabel(questionId, choiceIndex) {
+  const q = QUESTIONS.find((x) => x.id === questionId);
+  if (!q || choiceIndex === null || choiceIndex === undefined) return "";
+  return q.choices[choiceIndex] ?? "";
+}
+
 export function gradeChoice(questionId, choiceIndex) {
   const q = QUESTIONS.find((x) => x.id === questionId);
   if (!q) throw new Error(`unknown question ${questionId}`);
@@ -120,9 +124,45 @@ export function emptyState() {
   return {
     firstAttempts: Object.fromEntries(QUESTIONS.map((q) => [q.id, null])),
     retryCorrect: Object.fromEntries(QUESTIONS.map((q) => [q.id, null])),
+    retryChoices: Object.fromEntries(QUESTIONS.map((q) => [q.id, null])),
     journal: [],
     practiceRating: null,
+    practiceRevealed: false,
   };
+}
+
+export function sanitizeState(raw) {
+  const base = emptyState();
+  if (!raw || typeof raw !== "object") return base;
+  try {
+    for (const q of QUESTIONS) {
+      const fa = raw.firstAttempts?.[q.id];
+      if (typeof fa === "number" && fa >= 0 && fa < q.choices.length) {
+        base.firstAttempts[q.id] = fa;
+      }
+      const rc = raw.retryChoices?.[q.id];
+      if (typeof rc === "number" && rc >= 0 && rc < q.choices.length) {
+        base.retryChoices[q.id] = rc;
+        base.retryCorrect[q.id] = gradeChoice(q.id, rc);
+      }
+    }
+    if (Array.isArray(raw.journal)) {
+      base.journal = raw.journal.filter(
+        (e) =>
+          e &&
+          typeof e.questionId === "string" &&
+          typeof e.feedback === "string" &&
+          QUESTIONS.some((q) => q.id === e.questionId),
+      );
+    }
+    if (raw.practiceRating === "matched" || raw.practiceRating === "partly" || raw.practiceRating === "off") {
+      base.practiceRating = raw.practiceRating;
+    }
+    base.practiceRevealed = Boolean(raw.practiceRevealed);
+  } catch {
+    return emptyState();
+  }
+  return base;
 }
 
 export function applyFirstAnswer(state, questionId, choiceIndex) {
@@ -134,6 +174,7 @@ export function applyFirstAnswer(state, questionId, choiceIndex) {
     next.journal.push({
       questionId,
       firstWrongChoice: choiceIndex,
+      firstWrongLabel: choiceLabel(questionId, choiceIndex),
       feedback: q.missHint,
     });
   }
@@ -142,6 +183,10 @@ export function applyFirstAnswer(state, questionId, choiceIndex) {
 
 export function applyRetry(state, questionId, choiceIndex) {
   const next = structuredClone(state);
+  next.retryChoices[questionId] = choiceIndex;
   next.retryCorrect[questionId] = gradeChoice(questionId, choiceIndex);
   return next;
 }
+
+/** Future GitHub Pages project site path prefix (repo erfanpj/recall-studio). */
+export const PAGES_PATH_PREFIX = "/recall-studio";

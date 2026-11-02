@@ -71,6 +71,47 @@ h2 { font-size: 1.1rem; margin-top: 0; color: var(--cobalt-dark); }
 .muted { color: var(--muted); font-size: 0.95rem; }
 .score { font-weight: 600; color: var(--orange); }
 
+.contrast-banner { border-left: 5px solid var(--orange); }
+.contrast-row { margin: 0.35rem 0; }
+.pill {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 0.35rem;
+}
+.pill-warn { background: #ffedd5; color: #9a3412; }
+.pill-ok { background: #ccfbf1; color: #115e59; }
+
+.split-diagrams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+@media (max-width: 520px) {
+  .split-diagrams { grid-template-columns: 1fr; }
+}
+.diagram-title { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.35rem; }
+.participant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+.cell {
+  text-align: center;
+  padding: 0.45rem 0.25rem;
+  border-radius: 0.35rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.cell-train { background: #ccfbf1; color: #115e59; border: 2px solid var(--teal); }
+.cell-test { background: #ffedd5; color: #9a3412; border: 2px solid var(--orange); }
+
+.split-row { border-top: 4px solid var(--orange); }
+.split-person { border-top: 4px solid var(--teal); }
+
 .split-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -78,6 +119,7 @@ h2 { font-size: 1.1rem; margin-top: 0; color: var(--cobalt-dark); }
 }
 @media (max-width: 640px) {
   .split-grid { grid-template-columns: 1fr; }
+  .intro.card { position: sticky; top: 0; z-index: 2; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
 }
 
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
@@ -97,6 +139,8 @@ th, td { border-bottom: 1px solid #e2e8f0; padding: 0.4rem 0.35rem; text-align: 
 
 .question { border: 0; padding: 0; margin: 1.25rem 0; }
 .choice { display: block; margin: 0.35rem 0; cursor: pointer; }
+.choice input:disabled + * { opacity: 1; }
+.choice input:disabled { cursor: not-allowed; }
 .status { font-size: 0.9rem; color: var(--muted); }
 .retry { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #cbd5e1; }
 

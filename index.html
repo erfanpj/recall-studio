@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recall Studio — split lesson (fictional demo)</title>
-  <link rel="stylesheet" href="demo.css">
+  <title>Recall Studio — split lesson</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#questions">Skip to questions</a>
@@ -13,21 +13,27 @@
       <span class="logo" aria-hidden="true">RS</span>
       <div>
         <p class="brand-name">Recall Studio</p>
-        <p class="brand-tag">Fictional ML study demo · browser only</p>
+        <p class="brand-tag">Practice split — saved in this browser</p>
       </div>
     </div>
-    <p id="storageBanner" class="banner warn" hidden>Progress is kept in memory only — reload will clear it because browser storage is unavailable.</p>
+    <p id="storageBanner" class="banner warn" hidden>Progress stays in memory only until you close the tab — storage is unavailable.</p>
   </header>
 
   <main class="layout">
     <section class="intro card" aria-labelledby="intro-heading">
-      <h1 id="intro-heading">When rows repeat a person, the split changes the question</h1>
-      <p>Six toy rows from participants <strong>A</strong>, <strong>B</strong>, and <strong>C</strong> (two sessions each). Compare a <strong>row split</strong> and a <strong>person split</strong>. Icons ▣/▢ mark train vs test in addition to color.</p>
+      <h1 id="intro-heading" tabindex="-1">When rows repeat a person, the split changes the question</h1>
+      <p>Six practice rows from participants <strong>A</strong>, <strong>B</strong>, and <strong>C</strong> (two sessions each). Compare a <strong>row split</strong> and a <strong>person split</strong>. Shapes ▣/▢ mark train vs test as well as color.</p>
       <p id="scoreLine" class="score">First-attempt score: 0 / 5 (0 answered)</p>
     </section>
 
+    <section class="contrast-banner card" aria-label="Split contrast">
+      <p class="contrast-row"><span class="pill pill-warn">Row split</span> every ID touches <strong>both</strong> train and test.</p>
+      <p class="contrast-row"><span class="pill pill-ok">Person split</span> no ID appears in both sets.</p>
+      <div id="splitDiagrams" class="split-diagrams"></div>
+    </section>
+
     <div class="split-grid">
-      <section class="card" aria-labelledby="row-split-heading">
+      <section class="card split-row" aria-labelledby="row-split-heading">
         <h2 id="row-split-heading">Row split</h2>
         <p class="muted">Session 1 → train, session 2 → test.</p>
         <table id="split-row">
@@ -42,7 +48,7 @@
         </ul>
       </section>
 
-      <section class="card" aria-labelledby="person-split-heading">
+      <section class="card split-person" aria-labelledby="person-split-heading">
         <h2 id="person-split-heading">Person split</h2>
         <p class="muted">A and B entirely in train; C entirely in test.</p>
         <table id="split-person">
@@ -59,8 +65,8 @@
     </div>
 
     <section class="card" aria-labelledby="quiz-heading">
-      <h2 id="quiz-heading">Five fixed questions</h2>
-      <p class="muted">Your <strong>first</strong> choice on each question counts toward the score. Unanswered items stay open.</p>
+      <h2 id="quiz-heading">Five questions</h2>
+      <p class="muted">Your <strong>first</strong> choice on each question counts toward the score. After you submit, that answer locks.</p>
       <div id="questions"></div>
     </section>
 
@@ -70,12 +76,13 @@
     </section>
 
     <section class="card practice" aria-labelledby="practice-heading">
-      <h2 id="practice-heading">Practice (not scored)</h2>
-      <p>Read this model explanation, then self-rate — it does not affect your score.</p>
-      <blockquote>
+      <h2 id="practice-heading">Reflection (not scored)</h2>
+      <p>Reveal the explanation when you are ready, then self-rate — it does not affect your score.</p>
+      <button type="button" id="revealPracticeBtn" class="btn-secondary">Reveal explanation</button>
+      <blockquote id="practiceExplanation" hidden tabindex="-1">
         Person-level splits keep every row from one participant in the same set, which is the usual choice when you need to score on a <em>new</em> person. Row splits that scatter sessions can inflate scores because the model sees the same identity in both train and test.
       </blockquote>
-      <fieldset id="practiceRating">
+      <fieldset id="practiceRating" hidden>
         <legend>How well does the explanation match your understanding?</legend>
         <label><input type="radio" name="selfRate" value="matched"> Matched</label>
         <label><input type="radio" name="selfRate" value="partly"> Partly</label>
@@ -83,8 +90,15 @@
       </fieldset>
     </section>
 
-    <p class="actions"><button type="button" id="resetBtn" class="btn-secondary">Reset this demo</button></p>
+    <p class="actions"><button type="button" id="resetBtn" class="btn-secondary">Reset this lesson</button></p>
   </main>
+  <script>
+    try {
+      localStorage.getItem("recall-studio-independent-probe");
+    } catch (e) {
+      document.documentElement.dataset.storageUnavailable = "1";
+    }
+  </script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
