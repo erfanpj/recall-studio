@@ -85,7 +85,7 @@ async function main() {
   );
   await new Promise((r) => setTimeout(r, 500));
   try {
-    await withPage(base, async ({ evalJs }) => {
+    await withPage(base, async ({ evalJs, send }) => {
       await evalJs(`window.confirm = () => true`);
       const overlapPerson = await evalJs(`document.querySelector('#overlap-person').textContent`);
       if (overlapPerson !== "None") throw new Error(`person overlap: ${overlapPerson}`);
@@ -104,6 +104,25 @@ async function main() {
       }
       if (await evalJs(`document.querySelector('#revealPracticeBtn').hidden`)) {
         throw new Error("reveal button should reappear after reset");
+      }
+
+      for (const width of [320, 390]) {
+        await send("Emulation.setDeviceMetricsOverride", {
+          width,
+          height: 700,
+          deviceScaleFactor: 2,
+          mobile: true,
+        });
+        await evalJs(`document.querySelector('#q2-c0')?.click()`);
+        const visible = await evalJs(`
+          (() => {
+            const el = document.activeElement;
+            if (!el) return false;
+            const r = el.getBoundingClientRect();
+            return r.top >= 0 && r.bottom <= window.innerHeight;
+          })()
+        `);
+        if (!visible) throw new Error(`focused control obscured at width ${width}`);
       }
     });
 

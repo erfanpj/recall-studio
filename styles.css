@@ -69,7 +69,7 @@ body {
 h1 { font-size: 1.35rem; margin-top: 0; }
 h2 { font-size: 1.1rem; margin-top: 0; color: var(--cobalt-dark); }
 .muted { color: var(--muted); font-size: 0.95rem; }
-.score { font-weight: 600; color: var(--orange); }
+.score { font-weight: 600; color: #9a3412; }
 
 .contrast-banner { border-left: 5px solid var(--orange); }
 .contrast-row { margin: 0.35rem 0; }
@@ -119,7 +119,6 @@ h2 { font-size: 1.1rem; margin-top: 0; color: var(--cobalt-dark); }
 }
 @media (max-width: 640px) {
   .split-grid { grid-template-columns: 1fr; }
-  .intro.card { position: sticky; top: 0; z-index: 2; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); }
 }
 
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
@@ -130,8 +129,8 @@ th, td { border-bottom: 1px solid #e2e8f0; padding: 0.4rem 0.35rem; text-align: 
   font-weight: 700;
   color: var(--cobalt);
 }
-.set-train { color: var(--teal); font-weight: 600; }
-.set-test { color: var(--orange); font-weight: 600; }
+.set-train { color: #115e59; font-weight: 600; }
+.set-test { color: #9a3412; font-weight: 600; }
 .set-icon { font-family: monospace; margin-right: 0.25rem; }
 
 .id-summary { list-style: none; padding: 0; margin: 0.75rem 0 0; font-size: 0.92rem; }

@@ -172,6 +172,7 @@ function renderQuestions() {
           saveState();
           renderAll();
           const status = field.querySelector(".status-first");
+          status?.scrollIntoView({ block: "nearest" });
           status?.focus();
         });
       }

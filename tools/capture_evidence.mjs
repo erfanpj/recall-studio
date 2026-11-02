@@ -59,8 +59,14 @@ async function capture(base, outPath, width, height, hash = "") {
     });
     if (width <= 400) {
       await send("Runtime.evaluate", {
-        expression: `document.querySelector('#q1-c0')?.click()`,
+        expression: `
+          document.querySelector('#q1-c0')?.click();
+          document.querySelector('#q1-retry-1')?.click();
+          const block = document.querySelector('[data-question-id="q1"]');
+          block?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        `,
       });
+      await new Promise((r) => setTimeout(r, 300));
     }
     const shot = await send("Page.captureScreenshot", { format: "png" });
     fs.writeFileSync(outPath, Buffer.from(shot.data, "base64"));
