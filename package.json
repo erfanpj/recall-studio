@@ -1,0 +1,10 @@
+{
+  "name": "recall-studio-independent",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify:demo": "node tools/verify_demo.mjs",
+    "capture:evidence": "node tools/capture_evidence.mjs"
+  }
+}
