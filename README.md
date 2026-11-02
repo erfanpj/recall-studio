@@ -4,7 +4,7 @@ Original browser lesson about **train/test splits when rows repeat the same fict
 
 ![Split comparison at desktop width](docs/evidence/lesson-splits-desktop-1280.png)
 
-![Locked first attempt on a phone-width layout](docs/evidence/quiz-locked-mobile-390.png)
+![Locked wrong answer and correct retry at phone width](docs/evidence/quiz-locked-mobile-390.png)
 
 ## Problem
 
