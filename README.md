@@ -2,6 +2,8 @@
 
 Original browser lesson about **train/test splits when rows repeat the same fictional participant**. This is a new portfolio exercise—not a recovered historical product.
 
+**Live demo:** https://erfanpj.github.io/recall-studio/
+
 ![Split comparison at desktop width](docs/evidence/lesson-splits-desktop-1280.png)
 
 ![Locked wrong answer and correct retry at phone width](docs/evidence/quiz-locked-mobile-390.png)
